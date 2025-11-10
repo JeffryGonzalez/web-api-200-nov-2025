@@ -1,0 +1,46 @@
+
+# Note - these tokens are generated using the following commands that should be run in the API directory.
+
+# An AuthenticatedEmployee has no special roles.
+# dotnet user-jwts create -n joe@company.com 
+@AuthenticatedEmployeeToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImpvZUBjb21wYW55LmNvbSIsInN1YiI6ImpvZUBjb21wYW55LmNvbSIsImp0aSI6IjNiOWRjNWJkIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDoxMzM3IiwibmJmIjoxNzYyNTMxNzg3LCJleHAiOjE3NzA0ODA1ODcsImlhdCI6MTc2MjUzMTc4OCwiaXNzIjoiZG90bmV0LXVzZXItand0cyJ9.nvxSIHVcwpLJ7kO0wlpsmfyyMsrUWaM1u_5JluFECRY
+
+# An AuthenticatedSoftwareCenterEmployee has the SoftwareCenter role.
+# dotnet user-jwts create -n sue@company.com --role SoftwareCenter    
+@AuthenticatedSoftwareCenterEmployeeToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1ZUBjb21wYW55LmNvbSIsInN1YiI6InN1ZUBjb21wYW55LmNvbSIsImp0aSI6ImFlMmQxMjg5Iiwicm9sZSI6IlNvZnR3YXJlQ2VudGVyIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDoxMzM3IiwibmJmIjoxNzYyNTMxODQyLCJleHAiOjE3NzA0ODA2NDIsImlhdCI6MTc2MjUzMTg0MywiaXNzIjoiZG90bmV0LXVzZXItand0cyJ9.OzHpXeO4eKSwXZMyVZv8aT0GGr0L7qI7D1l1COmOMlQ
+
+# dotnet user-jwts create -n sue@company.com --role SoftwareCenter --role Manager
+# An AuthenticatedSoftwareCenterManager has the SoftwareCenter and Manager roles.
+@AuthenticateSoftwareCenterManagerToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1ZUBjb21wYW55LmNvbSIsInN1YiI6InN1ZUBjb21wYW55LmNvbSIsImp0aSI6IjY5YmI2NmY2Iiwicm9sZSI6WyJTb2Z0d2FyZUNlbnRlciIsIk1hbmFnZXIiXSwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDoxMzM3IiwibmJmIjoxNzYyNTMxODc3LCJleHAiOjE3NzA0ODA2NzcsImlhdCI6MTc2MjUzMTg3NywiaXNzIjoiZG90bmV0LXVzZXItand0cyJ9.HzRd97XUiLkt836v-04hw1PyyUFYJoBJdwnR_i5B3_E
+
+
+###
+# @prompt companyName
+# @prompt companyUrl
+# @prompt contactName
+# @prompt contactEmail
+# @prompt contactPhone
+POST http://localhost:1337/vendors 
+Authorization: {{AuthenticateSoftwareCenterManagerToken}}
+Content-Type: application/json
+
+{
+  "name": "{{companyName}}",
+  "url": "{{companyUrl}}",   
+  "contact": {
+    "name": "{{contactName}}",
+    "email": "{{contactEmail}}",
+    "phone": "{{contactPhone}}"
+  }
+}
+
+
+### 
+# @prompt vendorId
+GET http://localhost:1337/vendors/{{vendorId}}
+Authorization: {{AuthenticatedEmployeeToken}}
+
+### 
+GET http://localhost:1337/vendors 
+Authorization: {{AuthenticatedEmployeeToken}}
+
