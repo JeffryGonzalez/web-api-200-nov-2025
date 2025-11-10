@@ -24,9 +24,7 @@ builder.Services.AddAuthorizationBuilder().AddPolicy("SoftwareCenterManager", po
 });
 
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
+// config - it is going to look for this in many places - appsettings.json, appsettings.environment.json, environment variables
 var connectionString = builder.Configuration.GetConnectionString("software") ?? throw new Exception("No Connection String Found In Environment");
 
 builder.Services.AddMarten(opts =>
