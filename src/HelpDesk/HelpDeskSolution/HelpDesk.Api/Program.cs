@@ -3,6 +3,7 @@ using Marten;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddServiceDefaults();
 
 builder.Services.AddAuthentication().AddJwtBearer(); // Authentication - Finding out who someone is
 builder.Services.AddControllers() // this is optional, we don't have to use controllers. 

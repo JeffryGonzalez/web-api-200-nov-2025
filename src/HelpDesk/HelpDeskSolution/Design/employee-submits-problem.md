@@ -54,6 +54,31 @@ Content-Type: application/json
 
 ```
 
+## Response
+
+```http
+201 Created
+Location: http://localhost:1338/employee/issues/{issueId}
+Content-Type: application/json 
+
+{
+    "id": "{{issueId}}"
+    "softwareId": "some-id-from-the-software-team",
+    "description": "long form description of the issue",
+    "impact": "WorkStoppage",
+    "impactRadius": "Customer",
+    "contactMechanisms": {
+        "email": "jeff@company.com",
+        "phone": "555-1212"
+    },
+    "contactPreference": "Email",
+    "submittedBy": "name in token",
+    "submittedAt": "date time offset of when it was submitted",
+    "status": "AwaitingVerification" | "AwaitingTechAssignment" | "ElevatedToVipManager" | ... 
+
+}
+```
+
 ```http
 GET http://localhost:1337/open-issues
 ```
