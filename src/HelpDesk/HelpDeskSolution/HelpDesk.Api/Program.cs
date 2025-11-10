@@ -1,24 +1,30 @@
 using Marten;
 
+
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddAuthentication().AddJwtBearer();
-builder.Services.AddControllers();
-builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthentication().AddJwtBearer(); // Authentication - Finding out who someone is
+builder.Services.AddControllers(); // this is optional, we don't have to use controllers. 
+builder.Services.AddHttpContextAccessor(); // In a service we create, we can access the HTTP context.
 builder.Services.AddOpenApi();
+builder.Services.AddSingleton(_ => TimeProvider.System); // this is for the "clock"
 
 
+// your database stuff will vary. You might use SQL Server, DB2, MongoDb, whatever.
 var connectionString = builder.Configuration.GetConnectionString("issues") ?? throw new Exception("No Connection String Found In Environment");
-
+// The IDocumentSession that we can use in our controllers, services, etc.
 builder.Services.AddMarten(opts =>
 {
     opts.Connection(connectionString);
 }).UseLightweightSessions();
 
+// above this line is configuration of the services that make up our API
 var app = builder.Build();
+// after this, you can't change the services - but you do configure "middleware"
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment()) // Environment Variable on your machine called ASPNETCORE_ENVIRONMENT
 {
-    app.MapOpenApi();
+    app.MapOpenApi(); // makes it so we are generating an OAS 3.0 Specification ("swagger doc")
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/openapi/v1.json", "v1");
@@ -28,9 +34,12 @@ if (app.Environment.IsDevelopment())
         string.Join("\n", endpointSources.SelectMany(source => source.Endpoints)));
 }
 
-app.UseAuthentication(); 
-app.UseAuthorization();
+app.UseAuthentication();  // use authentication middleware - look at incoming requests
+
+app.UseAuthorization(); // setting policies about who can do what.
+// go look at all my classes, look for the [HttpX] attributes, and create the routing table.
+app.MapControllers();
 
 app.Run();
 
-public partial class Program;
+public partial class Program; // tomorrow, .net 10 comes out! you don't have to do this any more!
