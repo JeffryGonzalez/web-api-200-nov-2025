@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+      <UserSecretsId>24e9a61c-3925-4e5c-b932-e4e515983316</UserSecretsId>
+  </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="FluentValidation" Version="12.1.0" />
         <PackageReference Include="Marten.AspNetCore" Version="8.14.0" />

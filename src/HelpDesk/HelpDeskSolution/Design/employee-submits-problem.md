@@ -37,14 +37,14 @@ What do we need to know:
 
 ```http
 POST http://localhost:1338/employee/issues
-Authorization: Bearer with the id from the identity server
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImJyZW5kYUBjb21wYW55LmNvbSIsInN1YiI6ImJyZW5kYUBjb21wYW55LmNvbSIsImp0aSI6IjEwZGUxN2RiIiwicm9sZSI6WyJjZW8iLCJtYW5hZ2VyIiwiZGV2ZWxvcGVyIl0sImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTMzOCIsIm5iZiI6MTc2MjgwMzYyMiwiZXhwIjoxNzcwNzUyNDIyLCJpYXQiOjE3NjI4MDM2MjIsImlzcyI6ImRvdG5ldC11c2VyLWp3dHMifQ.SWbQToF7wWGyGW25I4BSbFcxotO0E57TobRaZZg4uMg
 Content-Type: application/json
 
 {
     "sofwareId": "some-id-from-the-software-team",
     "description": "long form description of the issue",
-    "impact": "Inconvenience",
-    "impactRadius": "Personal",
+    "impact": "WorkStoppage",
+    "impactRadius": "Customer",
     "contactMechanisms": {
         "email": "jeff@company.com",
         "phone": "555-1212"

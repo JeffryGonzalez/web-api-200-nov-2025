@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using HelpDesk.Api.Employee.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelpDesk.Api.Employee;
@@ -7,7 +8,9 @@ public class IssuesController : ControllerBase
 {
     [Authorize] // requires an authorization header with a bearer JWT or return 401
     [HttpPost("/employee/issues")]
-    public async Task<ActionResult> ReportAnIssue()
+    public async Task<ActionResult> ReportAnIssue(
+        [FromBody] IssueCreateModel request
+        )
     {
         // Transaction List - Fowler
         // 0. Only employees that are identified by our IDP can do this.

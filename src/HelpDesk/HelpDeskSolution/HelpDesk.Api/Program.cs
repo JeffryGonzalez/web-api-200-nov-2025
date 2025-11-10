@@ -1,10 +1,20 @@
+using System.Text.Json.Serialization;
 using Marten;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication().AddJwtBearer(); // Authentication - Finding out who someone is
-builder.Services.AddControllers(); // this is optional, we don't have to use controllers. 
+builder.Services.AddControllers() // this is optional, we don't have to use controllers. 
+    .AddJsonOptions(options =>
+    {
+        // Allows you to send enum values as string and serializes them as strings.
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        // in Json, if a property doesn't exist, it's the same as returning it with a null value
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
+    });
+
 builder.Services.AddHttpContextAccessor(); // In a service we create, we can access the HTTP context.
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton(_ => TimeProvider.System); // this is for the "clock"
