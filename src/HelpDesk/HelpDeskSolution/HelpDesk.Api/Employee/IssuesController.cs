@@ -9,13 +9,14 @@ namespace HelpDesk.Api.Employee;
 
 public class IssuesController : ControllerBase
 {
-    [Authorize] // requires an authorization header with a bearer JWT or return 401
+    //[Authorize] // requires an authorization header with a bearer JWT or return 401
     [HttpPost("/employee/issues")]
     public async Task<ActionResult> ReportAnIssue(
         [FromBody] IssueCreateModel request,
         [FromServices] IDocumentSession session,
         [FromServices] TimeProvider clock,
-        [FromServices] IManageUserIdentity userIdentity
+        [FromServices] IManageUserIdentity userIdentity,
+        [FromServices] IssueCreateModelValidator validator
         // this is an adjustable clock for testing.
         )
     {
@@ -27,7 +28,14 @@ public class IssuesController : ControllerBase
         // 2. Validate it - have some rules, enforce them, if it is bad, send them a 400 Bad Request
         // 3. We have to check to see if this is supported software
         // we are going to have to make a request maybe to the software center and ask if this
-      
+        var validationResults = await validator.ValidateAsync( request );
+        if(!validationResults.IsValid)
+        {
+            //return BadRequest(); // a 400 - this is what I usually do, but..
+            return BadRequest(validationResults.ToDictionary());
+        }
+
+        // do the more complex stuff for validation here.
         
         // if a request takes longer than about ~100ms on my local machine, it's too much.
         var entityToSave = new IssueEntity

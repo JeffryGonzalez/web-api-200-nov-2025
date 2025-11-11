@@ -1,4 +1,8 @@
-﻿namespace HelpDesk.Api.Employee.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using FluentValidation;
+using Marten;
+
+namespace HelpDesk.Api.Employee.Models;
 
 
 /*{
@@ -19,6 +23,7 @@ public enum IssueContactPreferences { Email, Phone }
 
 public record IssueCreateModel
 {
+   
     public Guid SoftwareId { get; init; }
     public string Description { get; init; } = string.Empty;
     public IssueImpact Impact { get; init; }  
@@ -29,6 +34,15 @@ public record IssueCreateModel
 
 }
 
+public class IssueCreateModelValidator : AbstractValidator<IssueCreateModel>
+{
+    public IssueCreateModelValidator()
+    {
+        RuleFor(e => e.ContactMechanisms).NotEmpty();
+        RuleFor(e => e.SoftwareId).NotEmpty(); // This makes sure it isn't missing or Guid.NewGuid()
+        RuleFor(e => e.Description).NotEmpty().MinimumLength(10).MaximumLength(500);
+    }
+}
 public record IssueContactMechanism
 {
     public string? Email { get; init; }

@@ -41,7 +41,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6I
 Content-Type: application/json
 
 {
-    "sofwareId": "some-id-from-the-software-team",
+    "softwareId": "e1650e49-df81-421f-bfd0-ad081b71c319",
     "description": "long form description of the issue",
     "impact": "WorkStoppage",
     "impactRadius": "Customer",

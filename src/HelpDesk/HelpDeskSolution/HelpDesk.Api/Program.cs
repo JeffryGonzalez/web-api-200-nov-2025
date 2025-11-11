@@ -1,5 +1,7 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using HelpDesk.Api.Employee.BackgroundWorker;
+using HelpDesk.Api.Employee.Models;
 using HelpDesk.Api.Services;
 using Marten;
 
@@ -15,13 +17,23 @@ builder.Services.AddControllers() // this is optional, we don't have to use cont
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         // in Json, if a property doesn't exist, it's the same as returning it with a null value
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-
+        // one more option
+        options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
     });
 
 builder.Services.AddHttpContextAccessor(); // In a service we create, we can access the HTTP context.
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton(_ => TimeProvider.System); // this is for the "clock"
-builder.Services.AddScoped<IManageUserIdentity,UserIdentityManager>();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddScoped<IManageUserIdentity, DevelopmentOnlyUserIdentityFakeProvider>();
+
+}
+else
+{
+    builder.Services.AddScoped<IManageUserIdentity, UserIdentityManager>();
+}
 // builder.Services.AddHostedService<IssueProcessor>();
 
 // your database stuff will vary. You might use SQL Server, DB2, MongoDb, whatever.
@@ -35,6 +47,7 @@ builder.Services.AddMarten(opts =>
     .UseNpgsqlDataSource()
     .UseLightweightSessions();
 
+builder.Services.AddScoped<IssueCreateModelValidator>();
 // above this line is configuration of the services that make up our API
 var app = builder.Build();
 // after this, you can't change the services - but you do configure "middleware"

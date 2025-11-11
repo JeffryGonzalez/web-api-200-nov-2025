@@ -38,6 +38,14 @@ public class UserIdentityManager(IHttpContextAccessor context, IDocumentSession 
     }
 }
 
+public class DevelopmentOnlyUserIdentityFakeProvider : IManageUserIdentity
+{
+    public Task<Guid> GetUserIdFromRequestingContextAsync()
+    {
+        return Task.FromResult(Guid.Parse("e1650e49-df81-421f-bfd0-ad081b71c319"));
+    }
+}
+
 public class UserIdentity
 {
     public Guid Id { get; set; }
