@@ -1,9 +1,11 @@
 ﻿using HelpDesk.Api.Employee.Data;
 using HelpDesk.Api.Employee.Models;
+using HelpDesk.Api.HttpClients;
 using HelpDesk.Api.Services;
 using Marten;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Wolverine;
 
 namespace HelpDesk.Api.Employee;
 
@@ -13,21 +15,15 @@ public class IssuesController : ControllerBase
     [HttpPost("/employee/issues")]
     public async Task<ActionResult> ReportAnIssue(
         [FromBody] IssueCreateModel request,
-        [FromServices] IDocumentSession session,
         [FromServices] TimeProvider clock,
         [FromServices] IManageUserIdentity userIdentity,
-        [FromServices] IssueCreateModelValidator validator
+        [FromServices] IssueCreateModelValidator validator,
+        [FromServices] IMessageContext messageBus,
+        [FromServices] SoftwareCenter softwareCenterApi
         // this is an adjustable clock for testing.
         )
     {
-        // Transaction List - Fowler
-        // 0. Only employees that are identified by our IDP can do this.
-        //    -- their identity should be in a JWT bearer token in then authorization header.
-        //    -- if they have not been identified, we should send a 401 response (Unauthorized)
-        // 1. look at the data they sent in the body of the request
-        // 2. Validate it - have some rules, enforce them, if it is bad, send them a 400 Bad Request
-        // 3. We have to check to see if this is supported software
-        // we are going to have to make a request maybe to the software center and ask if this
+       
         var validationResults = await validator.ValidateAsync( request );
         if(!validationResults.IsValid)
         {
@@ -35,37 +31,42 @@ public class IssuesController : ControllerBase
             return BadRequest(validationResults.ToDictionary());
         }
 
-        // do the more complex stuff for validation here.
-        
-        // if a request takes longer than about ~100ms on my local machine, it's too much.
-        var entityToSave = new IssueEntity
+        var supportedSoftware = await softwareCenterApi.ValidateSoftwareItemFromCatalogAsync(request.SoftwareId);
+        if (supportedSoftware != null)
+        {
+              // you have some software - it is supported.
+        }
+
+        var response = new IssueCreateResponseModel
         {
             Id = Guid.NewGuid(),
-            Status = IssueStatus.AwaitingVerification,
-            SubmittedAt = clock.GetUtcNow(), // Fix
-            SubmittedBy = await userIdentity.GetUserIdFromRequestingContextAsync(), // we will do something else with this tomorrow.
-            SubmittedIssue = new SubmittedIssue
-            {
-                SoftwareId = request.SoftwareId,
-                ContactMechanisms = request.ContactMechanisms,
-                ContactPreferences = request.ContactPreferences,
-                Description = request.Description,
-                Impact = request.Impact,
-                ImpactRadius = request.ImpactRadius
-
-            }
+            ContactMechanisms = request.ContactMechanisms,
+            ContactPreferences = request.ContactPreferences,
+            Description = request.Description,
+            Impact = request.Impact,
+            ImpactRadius = request.ImpactRadius,
+            SoftwareId = request.SoftwareId,
+            SubmittedBy = await userIdentity.GetUserIdFromRequestingContextAsync()
         };
-        session.Store(entityToSave); // whatever code you have to write to store it.
-        await session.SaveChangesAsync();
-        // is (or still is) in the catalog...
-        await Task.Delay(TimeSpan.FromSeconds(1)); // call the software center api - worked!
-        // update the entity and save it in the database...
-        // 5. See if it is a VIP, etc.
-        await Task.Delay(TimeSpan.FromMilliseconds(500)); // check to see if they are a VIP 
-        // if so, update the entity, save it... 
-        // 4. Assign it to a tech
-        await Task.Delay(TimeSpan.FromMilliseconds(500));
 
-        return Created();
+        // hand this off to a "background worker" to handle. This controller is busy enough.
+        // BUT - it must be durable - it has to save it as is, in case there is a failure, etc.
+        // Jimmy Bogard - AutoMapper, Mediatr
+        await messageBus.PublishAsync(new ProcessEmployeeIssue(response));
+        
+        return Created($"/employee/issues/{response.Id}", response);
+    }
+
+    [HttpGet("/employee/issues/{id:guid}")]
+    public async Task<ActionResult> GetIssueAsync(Guid id,[FromServices] IDocumentSession session)
+    {
+        var response = await session.Events.AggregateStreamAsync<IssueCreateResponseModel>(id);
+        if(response is null)
+        {
+            return NotFound("Nope - nothing");
+        } else
+        {
+            return Ok(response);
+        }
     }
 }

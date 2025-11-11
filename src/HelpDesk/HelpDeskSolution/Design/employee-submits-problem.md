@@ -42,7 +42,7 @@ Content-Type: application/json
 
 {
     "softwareId": "e1650e49-df81-421f-bfd0-ad081b71c319",
-    "description": "long form description of the issue",
+    "description": "long form description of the issue Jeff Was Here",
     "impact": "WorkStoppage",
     "impactRadius": "Customer",
     "contactMechanisms": {
@@ -52,6 +52,10 @@ Content-Type: application/json
     "contactPreference": "Email"
 }
 
+```
+
+```http
+GET http://localhost:1338/employee/issues/1ad8d0a5-c594-4fb6-ba3b-17d765ba3263
 ```
 
 ## Response
@@ -77,6 +81,11 @@ Content-Type: application/json
     "status": "AwaitingVerification" | "AwaitingTechAssignment" | "ElevatedToVipManager" | ... 
 
 }
+```
+
+
+```http
+GET http://localhost:1338/debug/routes
 ```
 
 ```http

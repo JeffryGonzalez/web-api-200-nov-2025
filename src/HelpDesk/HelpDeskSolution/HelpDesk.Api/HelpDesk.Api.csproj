@@ -15,6 +15,7 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10" />
         <PackageReference Include="Riok.Mapperly" Version="4.3.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.6" />
+        <PackageReference Include="WolverineFx.Marten" Version="5.1.0" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\HelpDesk.ServiceDefaults\HelpDesk.ServiceDefaults.csproj" />

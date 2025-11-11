@@ -2,12 +2,27 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using HelpDesk.Api.Employee.BackgroundWorker;
 using HelpDesk.Api.Employee.Models;
+using HelpDesk.Api.HttpClients;
 using HelpDesk.Api.Services;
 using Marten;
+using Wolverine;
+using Wolverine.Marten;
 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
+builder.UseWolverine(options =>
+{
+    // come back to this.
+    options.Policies.UseDurableLocalQueues(); 
+    // This means all commands that are sent for processing are saved in the database
+    // and will be "tracked" on whether they were handled or not.
+});
+
+builder.Services.AddHttpClient<SoftwareCenter>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:1337"); // obviously fake.. 
+});
 
 builder.Services.AddAuthentication().AddJwtBearer(); // Authentication - Finding out who someone is
 builder.Services.AddControllers() // this is optional, we don't have to use controllers. 
@@ -44,6 +59,7 @@ builder.Services.AddMarten(opts =>
 {
     //opts.Connection(connectionString); // Come back to this.
    })
+    .IntegrateWithWolverine()
     .UseNpgsqlDataSource()
     .UseLightweightSessions();
 
