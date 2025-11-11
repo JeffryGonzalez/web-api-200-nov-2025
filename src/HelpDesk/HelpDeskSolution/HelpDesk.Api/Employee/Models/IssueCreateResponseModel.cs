@@ -15,13 +15,14 @@ public record IssueCreateResponseModel
     public string? SoftwareVendor { get; set; } = null;
     public string? SoftwareMessage { get; set; } = null;
     public string? VipStatus { get; set; } = null;
+    public int AssignedPriority { get; set; }
     public Guid SubmittedBy { get; init; } 
 
     public IssueContactMechanism ContactMechanisms { get; init; } = new();
     public IssueContactPreferences ContactPreferences { get; init; }
     public IssueStatus Status { get; set; } = IssueStatus.AwaitingVerification;
 
-    public IssueCreateResponseModel Create(EmployeeSubmittedIssue @event)
+    public static IssueCreateResponseModel Create(EmployeeSubmittedIssue @event)
     {
         return new IssueCreateResponseModel
         {
@@ -34,10 +35,11 @@ public record IssueCreateResponseModel
             ImpactRadius = @event.Issue.ImpactRadius,
             SoftwareId = @event.Issue.SoftwareId,
             SubmittedBy = @event.Issue.SubmittedBy,
-
+           
         };
     }
 
+   
     public static IssueCreateResponseModel Apply(VipIssueReported @event, IssueCreateResponseModel model)
     {
         return model with { VipStatus = "Is Vip" };

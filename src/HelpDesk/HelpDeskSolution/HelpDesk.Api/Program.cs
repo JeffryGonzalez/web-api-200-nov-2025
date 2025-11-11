@@ -21,7 +21,7 @@ builder.UseWolverine(options =>
 
 builder.Services.AddHttpClient<SoftwareCenter>(client =>
 {
-    client.BaseAddress = new Uri("http://localhost:1337"); // obviously fake.. 
+    client.BaseAddress = new Uri(builder.Configuration["services:software:http:0"]); // obviously fake.. 
 });
 
 builder.Services.AddAuthentication().AddJwtBearer(); // Authentication - Finding out who someone is

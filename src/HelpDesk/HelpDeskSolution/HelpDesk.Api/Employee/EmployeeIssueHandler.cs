@@ -15,13 +15,18 @@ public record CheckForSupportedSoftware(Guid IssueId, Guid SoftwareId);
 
 public class EmployeeIssueHandler // some magic here - this class MUST end with the word "Handler"
 {
-    public async Task Handle(ProcessEmployeeIssue command, ILogger<EmployeeIssueHandler> logger, IMessageContext messageBus, IDocumentSession session)
+    public async Task<OutgoingMessages> Handle(ProcessEmployeeIssue command, ILogger<EmployeeIssueHandler> logger, IMessageContext messageBus, IDocumentSession session)
     {
         session.Events.Append(command.Issue.Id, new EmployeeSubmittedIssue(command.Issue));
         await session.SaveChangesAsync();
         logger.LogInformation("Handling the issue - {description}", command.Issue.Description);
-        await messageBus.InvokeAsync(new CheckForVipStatus(command.Issue.Id, command.Issue.SubmittedBy));
-        await messageBus.InvokeAsync(new CheckForSupportedSoftware(command.Issue.Id, command.Issue.SoftwareId));
+        return new OutgoingMessages
+        {
+            new CheckForVipStatus(command.Issue.Id, command.Issue.SubmittedBy),
+            new CheckForSupportedSoftware(command.Issue.Id, command.Issue.SoftwareId)
+        };
+       // messageBus.SendAsync( new CheckForVipStatus(command.Issue.Id, command.Issue.SubmittedBy));
+        //await messageBus.InvokeAsync(new CheckForSupportedSoftware(command.Issue.Id, command.Issue.SoftwareId));
     }
 }
 
@@ -37,7 +42,9 @@ public class VipStatusHandler
  
         // if they are, then log that this issue is for a vip, otherwise, log that they aren't.
         session.Events.Append(command.IssueId, new VipIssueReported());
+        
         await session.SaveChangesAsync();
+       
     }
 }
 

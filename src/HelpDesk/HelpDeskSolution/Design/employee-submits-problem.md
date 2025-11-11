@@ -55,7 +55,7 @@ Content-Type: application/json
 ```
 
 ```http
-GET http://localhost:1338/employee/issues/1ad8d0a5-c594-4fb6-ba3b-17d765ba3263
+GET http://localhost:1338/employee/issues/d8c25afe-55c2-49ca-97b2-d967b39ffd1d
 ```
 
 ## Response
