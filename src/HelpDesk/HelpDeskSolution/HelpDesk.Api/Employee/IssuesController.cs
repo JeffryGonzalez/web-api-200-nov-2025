@@ -23,8 +23,14 @@ public class IssuesController : ControllerBase
         // 1. look at the data they sent in the body of the request
         // 2. Validate it - have some rules, enforce them, if it is bad, send them a 400 Bad Request
         // 3. We have to check to see if this is supported software
-        // 4. Assign it to a tech
+        // we are going to have to make a request maybe to the software center and ask if this
+        // is (or still is) in the catalog...
+        await Task.Delay(TimeSpan.FromSeconds(1));
         // 5. See if it is a VIP, etc.
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
+        // 4. Assign it to a tech
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
+
         // if a request takes longer than about ~100ms on my local machine, it's too much.
         var entityToSave = new IssueEntity
         {

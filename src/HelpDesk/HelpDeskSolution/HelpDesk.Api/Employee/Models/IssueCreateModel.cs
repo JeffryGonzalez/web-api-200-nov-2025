@@ -12,9 +12,9 @@
     },
     "contactPreference": "Email"
 }*/
-
-public enum IssueImpact {  Inconvenience, WorkStoppage }
-public enum IssueImpactRadius {  Personal, Customer}
+// if VIP adds 500 to the priority
+public enum IssueImpact {  Inconvenience, WorkStoppage } // WorkStoppage adds "50" to the priority
+public enum IssueImpactRadius {  Personal, Customer} // Customer Impact adds 100 to the priority
 public enum IssueContactPreferences { Email, Phone }
 
 public record IssueCreateModel
