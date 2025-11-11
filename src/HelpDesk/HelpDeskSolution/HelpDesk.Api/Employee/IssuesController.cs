@@ -18,8 +18,8 @@ public class IssuesController : ControllerBase
         [FromServices] TimeProvider clock,
         [FromServices] IManageUserIdentity userIdentity,
         [FromServices] IssueCreateModelValidator validator,
-        [FromServices] IMessageContext messageBus,
-        [FromServices] SoftwareCenter softwareCenterApi
+        [FromServices] IMessageContext messageBus
+ 
         // this is an adjustable clock for testing.
         )
     {
@@ -31,11 +31,7 @@ public class IssuesController : ControllerBase
             return BadRequest(validationResults.ToDictionary());
         }
 
-        var supportedSoftware = await softwareCenterApi.ValidateSoftwareItemFromCatalogAsync(request.SoftwareId);
-        if (supportedSoftware != null)
-        {
-              // you have some software - it is supported.
-        }
+       
 
         var response = new IssueCreateResponseModel
         {

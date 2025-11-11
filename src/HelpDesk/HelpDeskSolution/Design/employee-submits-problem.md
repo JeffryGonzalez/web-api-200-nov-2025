@@ -37,11 +37,10 @@ What do we need to know:
 
 ```http
 POST http://localhost:1338/employee/issues
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImJvYkBhb2wuY29tIiwic3ViIjoiYm9iQGFvbC5jb20iLCJqdGkiOiI4MmQxNTAwOCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTMzOCIsIm5iZiI6MTc2Mjg3NzEzOCwiZXhwIjoxNzcwODI1OTM4LCJpYXQiOjE3NjI4NzcxNDAsImlzcyI6ImRvdG5ldC11c2VyLWp3dHMifQ.3ueIrBKgvNRk0WI8OZAUGYoFbMR4C1iP0mRLjnvw5qo
 Content-Type: application/json
 
 {
-    "softwareId": "e1650e49-df81-421f-bfd0-ad081b71c319",
+    "softwareId": "e1650e49-df81-421f-bfd0-ad081b71c311",
     "description": "long form description of the issue Jeff Was Here",
     "impact": "WorkStoppage",
     "impactRadius": "Customer",
@@ -55,7 +54,7 @@ Content-Type: application/json
 ```
 
 ```http
-GET http://localhost:1338/employee/issues/d8c25afe-55c2-49ca-97b2-d967b39ffd1d
+GET http://localhost:1338/employee/issues/4f1b61f2-c9e1-43fe-a8ff-7a30376ffc6b
 ```
 
 ## Response

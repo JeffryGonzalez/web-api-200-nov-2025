@@ -28,7 +28,7 @@ public class IssueProcessor(ILogger<IssueProcessor> logger, IServiceProvider sp)
                                           // 4. Assign it to a tech
                 await AssignItToATech();
 
-                newIssue.Status = IssueStatus.Verified;
+                newIssue.Status = IssueStatus.AwaitingVerification;
                 session.Store(newIssue);
                 await session.SaveChangesAsync();
             }

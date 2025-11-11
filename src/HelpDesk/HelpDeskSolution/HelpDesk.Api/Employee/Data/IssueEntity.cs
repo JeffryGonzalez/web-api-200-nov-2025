@@ -19,7 +19,7 @@ namespace HelpDesk.Api.Employee.Data;
 
 }*/
 
-public enum IssueStatus {  AwaitingVerification, Verified }
+public enum IssueStatus {  AwaitingVerification, AwaitingTechAssignment }
 public class IssueEntity
 {
     public Guid Id { get; set; }

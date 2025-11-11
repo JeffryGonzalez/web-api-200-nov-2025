@@ -10,7 +10,8 @@ using Wolverine.Marten;
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.AddServiceDefaults();
+builder.AddServiceDefaults(); // this adds the resiliency handers - https://learn.microsoft.com/en-us/dotnet/core/resilience/http-resilience?tabs=dotnet-cli
+
 builder.UseWolverine(options =>
 {
     // come back to this.

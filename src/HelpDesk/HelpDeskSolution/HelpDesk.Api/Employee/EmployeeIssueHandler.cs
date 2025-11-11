@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using HelpDesk.Api.Employee.Models;
+using HelpDesk.Api.HttpClients;
 using Marten;
 using Wolverine;
 
@@ -52,12 +53,23 @@ public record SupportedSoftwareReported(string Title, string Vendor);
 public record UnsupportedSoftwareReported();
 public class SupportedSoftwareHandler
 {
-    public async Task Handle(CheckForSupportedSoftware command, IDocumentSession session)
+    public async Task Handle(CheckForSupportedSoftware command, 
+        SoftwareCenter softwareApi,
+        IDocumentSession session)
     {
+        var response = await softwareApi.ValidateSoftwareItemFromCatalogAsync(command.SoftwareId);
+        if (response is not null)
+        {
+            session.Events.Append(command.IssueId, new SupportedSoftwareReported("Destiny 2", "Bungie"));
+            
+        }
+        else
+        {
+            session.Events.Append(command.IssueId, new UnsupportedSoftwareReported());
+        }
         // write the code to call the software api with the command.SoftwareId
         // if it is there, return the title and vendor of the software,
         // if it isn't log that this is not supported.
-        session.Events.Append(command.IssueId, new SupportedSoftwareReported("Destiny 2", "Bungie"));
         await session.SaveChangesAsync();
 
     }

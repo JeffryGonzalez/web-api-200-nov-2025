@@ -1,28 +1,37 @@
 ﻿namespace HelpDesk.Api.HttpClients;
 
-
 // Typed HttpClients 
-public class SoftwareCenter(HttpClient client)
+public class SoftwareCenter(HttpClient client, TimeProvider clock)
 {
     public async Task<SoftwareCatalogItem?> ValidateSoftwareItemFromCatalogAsync(Guid softwareId)
     {
         // Todo: think about doing a consumer/provider pattern - later.
         var response = await client.GetAsync("/catalog-items/" + softwareId);
-        
-       //  response.EnsureSuccessStatusCode();
 
-        if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        response.EnsureSuccessStatusCode();
+
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            return null; // This means they don't support this software - it isn't in the catalog.
+            var responseDate = response.Headers.Date;
+            var returnedBody = await response.Content.ReadFromJsonAsync<SoftwareCatalogItem>();
+            if (returnedBody is null) return null;
+            returnedBody.RetrievedAt = responseDate ?? clock.GetUtcNow();
+            return returnedBody;
         }
 
-        var returnedBody = await response.Content.ReadFromJsonAsync<SoftwareCatalogItem>();
-        return returnedBody;
+        if (response.StatusCode != System.Net.HttpStatusCode.NotFound)
+        {
+            response.EnsureSuccessStatusCode();
+        }
+
+        return null;
+
     }
 }
 
 public record SoftwareCatalogItem
 {
-    public string Title { get; set; } = string.Empty;
-    public string Vendor { get; set; } = string.Empty;
+    public DateTimeOffset RetrievedAt { get; set; }
+    public required string Title { get; init; } = string.Empty;
+    public required string Vendor { get; init; } = string.Empty;
 }
