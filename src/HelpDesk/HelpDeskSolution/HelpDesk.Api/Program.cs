@@ -26,14 +26,14 @@ builder.Services.AddScoped<IManageUserIdentity,UserIdentityManager>();
 
 // your database stuff will vary. You might use SQL Server, DB2, MongoDb, whatever.
 // The IDocumentSession that we can use in our controllers, services, etc.
-builder.Services.AddNpgsqlDataSource("issues");
+builder.AddNpgsqlDataSource("issues");
 var connectionString = builder.Configuration.GetConnectionString("issues") ?? throw new Exception("No Connection String Found In Environment");
 Console.WriteLine(connectionString);
 builder.Services.AddMarten(opts =>
 {
-    opts.Connection(connectionString); // Come back to this.
+    //opts.Connection(connectionString); // Come back to this.
    })
-    //.UseNpgsqlDataSource()
+    .UseNpgsqlDataSource()
     .UseLightweightSessions();
 
 // above this line is configuration of the services that make up our API
