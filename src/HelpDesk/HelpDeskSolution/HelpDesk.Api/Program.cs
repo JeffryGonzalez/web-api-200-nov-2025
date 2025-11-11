@@ -22,15 +22,19 @@ builder.Services.AddHttpContextAccessor(); // In a service we create, we can acc
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton(_ => TimeProvider.System); // this is for the "clock"
 builder.Services.AddScoped<IManageUserIdentity,UserIdentityManager>();
-builder.Services.AddHostedService<IssueProcessor>();
+// builder.Services.AddHostedService<IssueProcessor>();
 
 // your database stuff will vary. You might use SQL Server, DB2, MongoDb, whatever.
-var connectionString = builder.Configuration.GetConnectionString("issues") ?? throw new Exception("No Connection String Found In Environment");
 // The IDocumentSession that we can use in our controllers, services, etc.
+builder.Services.AddNpgsqlDataSource("issues");
+var connectionString = builder.Configuration.GetConnectionString("issues") ?? throw new Exception("No Connection String Found In Environment");
+Console.WriteLine(connectionString);
 builder.Services.AddMarten(opts =>
 {
-    opts.Connection(connectionString);
-}).UseLightweightSessions();
+    opts.Connection(connectionString); // Come back to this.
+   })
+    //.UseNpgsqlDataSource()
+    .UseLightweightSessions();
 
 // above this line is configuration of the services that make up our API
 var app = builder.Build();

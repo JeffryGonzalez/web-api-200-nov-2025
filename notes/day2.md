@@ -22,5 +22,7 @@ Processing the Issue
     - Timed
 
 - Command Processing and Async Design
+    - Using commands and maybe event sourcing (geek level 3000)
+
 
 

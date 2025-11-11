@@ -7,6 +7,7 @@
       <UserSecretsId>24e9a61c-3925-4e5c-b932-e4e515983316</UserSecretsId>
   </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql" Version="13.0.0" />
         <PackageReference Include="FluentValidation" Version="12.1.0" />
         <PackageReference Include="Marten.AspNetCore" Version="8.14.0" />
 
