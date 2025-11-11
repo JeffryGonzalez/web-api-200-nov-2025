@@ -25,7 +25,7 @@ public class IssueEntity
     public Guid Id { get; set; }
     // this is "embedded data"
     public SubmittedIssue SubmittedIssue { get; set; } = new();
-    public string SubmittedBy { get; set; } = string.Empty;
+    public Guid SubmittedBy { get; set; }
     public DateTimeOffset SubmittedAt { get; set; }
     public IssueStatus Status { get; set; }
 

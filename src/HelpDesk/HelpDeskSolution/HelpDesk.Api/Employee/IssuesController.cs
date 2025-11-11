@@ -1,5 +1,6 @@
 ﻿using HelpDesk.Api.Employee.Data;
 using HelpDesk.Api.Employee.Models;
+using HelpDesk.Api.Services;
 using Marten;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,9 @@ public class IssuesController : ControllerBase
     public async Task<ActionResult> ReportAnIssue(
         [FromBody] IssueCreateModel request,
         [FromServices] IDocumentSession session,
-        [FromServices] TimeProvider clock // this is an adjustable clock for testing.
+        [FromServices] TimeProvider clock,
+        [FromServices] IManageUserIdentity userIdentity
+        // this is an adjustable clock for testing.
         )
     {
         // Transaction List - Fowler
@@ -30,14 +33,14 @@ public class IssuesController : ControllerBase
         await Task.Delay(TimeSpan.FromMilliseconds(500));
         // 4. Assign it to a tech
         await Task.Delay(TimeSpan.FromMilliseconds(500));
-
+        
         // if a request takes longer than about ~100ms on my local machine, it's too much.
         var entityToSave = new IssueEntity
         {
             Id = Guid.NewGuid(),
             Status = IssueStatus.AwaitingVerification,
             SubmittedAt = clock.GetUtcNow(), // Fix
-            SubmittedBy = User.Identity.Name, // we will do something else with this tomorrow.
+            SubmittedBy = await userIdentity.GetUserIdFromRequestingContextAsync(), // we will do something else with this tomorrow.
             SubmittedIssue = new SubmittedIssue
             {
                 SoftwareId = request.SoftwareId,

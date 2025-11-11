@@ -37,7 +37,7 @@ What do we need to know:
 
 ```http
 POST http://localhost:1338/employee/issues
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImJyZW5kYUBjb21wYW55LmNvbSIsInN1YiI6ImJyZW5kYUBjb21wYW55LmNvbSIsImp0aSI6IjEwZGUxN2RiIiwicm9sZSI6WyJjZW8iLCJtYW5hZ2VyIiwiZGV2ZWxvcGVyIl0sImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTMzOCIsIm5iZiI6MTc2MjgwMzYyMiwiZXhwIjoxNzcwNzUyNDIyLCJpYXQiOjE3NjI4MDM2MjIsImlzcyI6ImRvdG5ldC11c2VyLWp3dHMifQ.SWbQToF7wWGyGW25I4BSbFcxotO0E57TobRaZZg4uMg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImJvYkBhb2wuY29tIiwic3ViIjoiYm9iQGFvbC5jb20iLCJqdGkiOiI4MmQxNTAwOCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MTMzOCIsIm5iZiI6MTc2Mjg3NzEzOCwiZXhwIjoxNzcwODI1OTM4LCJpYXQiOjE3NjI4NzcxNDAsImlzcyI6ImRvdG5ldC11c2VyLWp3dHMifQ.3ueIrBKgvNRk0WI8OZAUGYoFbMR4C1iP0mRLjnvw5qo
 Content-Type: application/json
 
 {
@@ -88,3 +88,7 @@ GET http://localhost:1337/employees/{id}/issues
 Authorization: Bearer (some token, maybe for a manager or something)
 ```
 # Response
+
+GET http://localhost:1337/employee/issues
+GET http://localhost:1337/employees/9839389389/issues
+

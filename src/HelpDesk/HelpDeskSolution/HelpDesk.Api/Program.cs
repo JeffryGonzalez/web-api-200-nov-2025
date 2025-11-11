@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using HelpDesk.Api.Services;
 using Marten;
 
 
@@ -19,7 +20,7 @@ builder.Services.AddControllers() // this is optional, we don't have to use cont
 builder.Services.AddHttpContextAccessor(); // In a service we create, we can access the HTTP context.
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton(_ => TimeProvider.System); // this is for the "clock"
-
+builder.Services.AddScoped<IManageUserIdentity,UserIdentityManager>();
 
 // your database stuff will vary. You might use SQL Server, DB2, MongoDb, whatever.
 var connectionString = builder.Configuration.GetConnectionString("issues") ?? throw new Exception("No Connection String Found In Environment");

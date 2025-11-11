@@ -11,6 +11,8 @@ var issuesDb = postgres.AddDatabase("issues");
 
 
 builder.AddProject<Projects.HelpDesk_Api>("helpdesk-api")
+    .WaitFor(issuesDb)
     .WithReference(issuesDb);
+    
 
 builder.Build().Run();
