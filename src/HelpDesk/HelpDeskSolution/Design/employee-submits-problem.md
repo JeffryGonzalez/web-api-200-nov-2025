@@ -40,7 +40,7 @@ POST http://localhost:1338/employee/issues
 Content-Type: application/json
 
 {
-    "softwareId": "e1650e49-df81-421f-bfd0-ad081b71c311",
+    "softwareId": "f81dbfab-2a30-4e76-98e4-d1a67799711e",
     "description": "long form description of the issue Jeff Was Here",
     "impact": "WorkStoppage",
     "impactRadius": "Customer",
@@ -54,7 +54,7 @@ Content-Type: application/json
 ```
 
 ```http
-GET http://localhost:1338/employee/issues/4f1b61f2-c9e1-43fe-a8ff-7a30376ffc6b
+GET http://localhost:1338/employee/issues/174bdc16-041c-47ea-ba4f-565e11a710ca
 ```
 
 ## Response
