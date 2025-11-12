@@ -1,4 +1,5 @@
 ﻿using HelpDesk.Api.Employee.Data;
+using HelpDesk.Api.Employee.Handlers;
 
 namespace HelpDesk.Api.Employee.Models;
 
