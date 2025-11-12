@@ -99,4 +99,26 @@ public class IssuesController : ControllerBase
             .ToListAsync();
         return Ok(issues);
     }
+
+    [HttpGet("/issue-history/{id:guid}")]
+    public async Task<ActionResult> GetIssueHistory(Guid id, 
+        [FromServices] IDocumentSession session,
+        [FromQuery] long version = -1)
+    {
+        IssueHistoryReadModel? response;
+        if(version == -1)
+        {
+         response = await session.Events.AggregateStreamAsync<IssueHistoryReadModel>(id);
+          
+        } else
+        {
+            response = await session.Events.AggregateStreamAsync<IssueHistoryReadModel>(id, version);
+        }
+        if (response is null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(response);
+    }
 }

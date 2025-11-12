@@ -21,6 +21,11 @@ public static class Extensions
     }
     public static WebApplication MapCatalogItems(this WebApplication builder)
     {
+        var helpDeskGroup = builder.MapGroup("/help-desk");
+        //  .RequireAuthorization("HelpDeskOnly");
+        helpDeskGroup.MapGet("/catalog-items/{id:guid}", GetCatalogItemForHelpDesk.Handle);
+        // add other things in the future.
+
         builder.MapGet("/catalog-items", async ([FromServices] IDocumentSession session) => await session.Query<CatalogItemEntity>().ToListAsync()).RequireAuthorization();
         
         var group = builder.MapGroup("/vendors").RequireAuthorization(); // unless you are identified with a JWT

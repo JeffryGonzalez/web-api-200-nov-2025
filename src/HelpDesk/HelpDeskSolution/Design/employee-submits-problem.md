@@ -40,7 +40,7 @@ POST http://localhost:1338/employee/issues
 Content-Type: application/json
 
 {
-    "softwareId": "e1650e49-df81-421f-bfd0-ad081b71c319",
+    "softwareId": "5141619f-4b9a-4053-8289-ec4bb6cc5d02",
     "description": "Arms week event is too hard. Riderxxxxx",
     "impact": "WorkStoppage",
     "impactRadius": "Customer",
@@ -59,7 +59,7 @@ GET http://localhost:1338/demos/software/f81dbfab-2a30-4e76-98e4-d1a67799711e
 
 
 ```http
-GET http://localhost:1338/employee/issues/b24c3e0b-96b8-4cec-a080-1c26fac56208
+GET http://localhost:1338/employee/issues/2e19bd5e-c9d3-4ee8-965f-6af49b27152c
 ```
 
 ```http
@@ -112,3 +112,85 @@ Authorization: Bearer (some token, maybe for a manager or something)
 GET http://localhost:1337/employee/issues
 GET http://localhost:1337/employees/9839389389/issues
 
+## Message Stuff
+
+```json
+{
+  "id": "2e19bd5e-c9d3-4ee8-965f-6af49b27152c",
+  "version": 3,
+  "description": "Arms week event is too hard. Riderxxxxx",
+  "impact": "WorkStoppage",
+  "impactRadius": "Customer",
+  "software": {
+    "id": "5141619f-4b9a-4053-8289-ec4bb6cc5d02",
+    "retrievedAt": "2025-11-12T20:16:52+00:00",
+    "retrievedFrom": "http://software-center.company.com/help-desk/catalog-items/5141619f-4b9a-4053-8289-ec4bb6cc5d02",
+    "title": "Visual Studio Code",
+    "vendor": "Microsoft"
+  },
+  "vipStatus": "Is Vip",
+  "softwareChecked": true,
+  "vipStatusChecked": true,
+  "assignedPriority": 600,
+  "submittedBy": "9be7c56a-45cb-43df-960a-4eed2c7ce147",
+  "contactMechanisms": {
+    "email": "jeff@company.com",
+    "phone": "555-1212"
+  },
+  "contactPreferences": "Email",
+  "status": "AwaitingTechAssignment"
+}
+```
+
+Software is a "reference" to some data owned by someone else and this is a copy of it at a point in time.
+
+Scenario:
+
+User submits an issue on tuesday for a piece of software that is supported.
+Tuesday night, the software center retires it.
+Wednesday, a tech picks this up, and can see there was some software, but maybe finds out it isn't supported anymore. 
+
+
+## Example 
+
+```http
+POST /store/orders
+Authorization: Bearer (the id of the customer)
+Content-Type: application/json
+
+{
+    "item": {
+        "sku": 3282,
+        "retrievedAt": "{some date time}",
+        "name": "Beer",
+        "price": 12.99,
+        "qty": 1
+    },
+    "total": 12.99
+}
+````
+
+You are the orders api
+
+
+There is another api that has the products -
+that embedded product is from them.
+
+## Alternative Aggreagation of Events
+
+
+```json
+{
+    "id": "issue-id",
+    "history": [
+        { "when": "TimeItHappenend", "event": "IssueCreated"},
+        { "when": "TimeItHappened", "event", "VipIssue"}
+    ]
+}
+
+
+```
+
+```http
+GET http://localhost:1338/issue-history/d06ba34a-d41f-4dc5-a9ab-ce4f40038c1f?version=2
+```

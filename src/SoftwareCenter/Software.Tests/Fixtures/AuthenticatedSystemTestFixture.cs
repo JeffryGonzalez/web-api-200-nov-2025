@@ -54,7 +54,7 @@ public class AuthenticatedSystemTestFixture : IAsyncLifetime
         await _container.StartAsync();
         Host = await AlbaHost.For<Program>((config) =>
         {
-            config.UseSetting("ConnectionStrings:Software", _container.GetConnectionString());
+           // config.UseSetting("ConnectionStrings:Software", _container.GetConnectionString());
           
         }, new AuthenticationStub().WithName(AuthenticatedSub));
        

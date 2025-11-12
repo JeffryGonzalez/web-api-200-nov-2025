@@ -47,7 +47,8 @@ builder.Services.AddHttpContextAccessor(); // In a service we create, we can acc
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<TimeProvider>(_ => TimeProvider.System); // this is for the "clock"
 
-if (builder.Environment.IsDevelopment())
+var useFakeIdentity = builder.Configuration["USE_FAKE_IDENTITY"] == "true";
+if (useFakeIdentity)
 {
     builder.Services.AddScoped<IManageUserIdentity, DevelopmentOnlyUserIdentityFakeProvider>();
 
