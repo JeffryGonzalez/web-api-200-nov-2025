@@ -50,25 +50,5 @@ public record EmployeeIssueReadModel
     public IssueStatus Status { get; set; } = IssueStatus.AwaitingVerification;
 
    
-
-    private static int GetPriority(EmployeeIssueReadModel model)
-    {
-        var startingPriority = 0;
-        if (model.Impact == IssueImpact.WorkStoppage)
-        {
-            startingPriority += 50;
-        }
-
-        if (model.ImpactRadius == IssueImpactRadius.Customer)
-        {
-            startingPriority += 50;
-        }
-
-        if (model.VipStatus != null)
-        {
-            startingPriority += 500;
-        }
-        return startingPriority;
-    }
    
 }

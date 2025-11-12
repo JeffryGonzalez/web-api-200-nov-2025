@@ -60,8 +60,20 @@ builder.AddNpgsqlDataSource("issues");
 builder.Services.AddMarten(opts =>
 {
     //opts.Connection(connectionString); // Come back to this.
-    opts.Projections.Add<EmployeeIssueProjection>(ProjectionLifecycle.Inline);
+
+    // If you are using "live" projections, you don't have to do this.
+    // That is when you do session.Events.AggregateStreamAsync<EmployeeIssueReadModel>(id);
+
+    opts.Projections.Add<EmployeeIssueProjection>(ProjectionLifecycle.Inline); 
+    // Inline is POWERFUL but can be costly -
+    // this means that the stored document is updated in the same transaction as the events being
+    // published.
+    // Async means that we are going to use eventual consistency. 
+    // There will be a worker process (background worker) that periodically applies the events
+    // to the projection. So it won't be in the same transaction or immediate.
+    // That work can be spread to other nodes (processes) to scale this.
 })
+    
     .IntegrateWithWolverine()
     .UseNpgsqlDataSource()
     .UseLightweightSessions();

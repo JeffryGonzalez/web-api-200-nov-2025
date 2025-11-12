@@ -52,7 +52,12 @@ public class IssuesController : ControllerBase
         // hand this off to a "background worker" to handle. This controller is busy enough.
         // BUT - it must be durable - it has to save it as is, in case there is a failure, etc.
         // Jimmy Bogard - AutoMapper, Mediatr
+        // publish means - write this to the database, and get back to it after I return the result.
+
         await messageBus.PublishAsync(new ProcessEmployeeIssue(response));
+        // if we get here, it means that has been saved in the database. "durable" - if the database
+        // is down or there is some other error, this would throw, the user would get a 500 -
+        // they probably could assume then that the issue hasn't been recieved.
         
         return Created($"/employee/issues/{response.Id}", response);
     }
@@ -60,7 +65,10 @@ public class IssuesController : ControllerBase
     [HttpGet("/employee/issues/{id:guid}")]
     public async Task<ActionResult> GetIssueAsync(Guid id,[FromServices] IDocumentSession session)
     {
-        var response = await session.Events.AggregateStreamAsync<EmployeeIssueReadModel>(id);
+        // Live aggregation - don't look for a document in the database, recreate this from the log of events
+        // on this stream. 
+        // var response = await session.Events.AggregateStreamAsync<EmployeeIssueReadModel>(id);
+        var response = await session.LoadAsync<EmployeeIssueReadModel>(id); 
         // Todo: AuthZ - should only be able to retrieve your own issue
         if(response is null)
         {

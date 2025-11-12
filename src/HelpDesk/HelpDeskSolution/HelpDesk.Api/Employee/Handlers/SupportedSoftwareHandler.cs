@@ -22,6 +22,7 @@ public class SupportedSoftwareHandler
         // write the code to call the software api with the command.SoftwareId
         // if it is there, return the title and vendor of the software,
         // if it isn't log that this is not supported.
+        // In the same database transaction that is writing this event, the projection is updated too.
         await session.SaveChangesAsync();
 
     }
