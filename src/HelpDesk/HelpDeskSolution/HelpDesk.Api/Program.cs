@@ -23,7 +23,8 @@ builder.UseWolverine(options =>
 
 builder.Services.AddHttpClient<SoftwareCenter>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["services:software:http:0"]); // obviously fake.. 
+    var serviceAddress = builder.Configuration["services:software:http:0"] ?? throw new Exception("No SoftwareCenter is configured");
+    client.BaseAddress = new Uri(serviceAddress); 
 });
 builder.Services.AddScoped<ILookupSoftwareFromTheSoftwareApi>(b =>
 {
@@ -47,7 +48,8 @@ builder.Services.AddHttpContextAccessor(); // In a service we create, we can acc
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<TimeProvider>(_ => TimeProvider.System); // this is for the "clock"
 
-var useFakeIdentity = builder.Configuration["USE_FAKE_IDENTITY"] == "true";
+var useFakeIdentity = builder.Environment.IsDevelopment();
+// var useFakeIdentity = builder.Configuration["USE_FAKE_IDENTITY"] == "true";
 if (useFakeIdentity)
 {
     builder.Services.AddScoped<IManageUserIdentity, DevelopmentOnlyUserIdentityFakeProvider>();
