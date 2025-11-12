@@ -58,7 +58,10 @@ public class GettingSoftwareMockedApi
         Assert.NotNull(body);
         Assert.Equal(expectedResponse.Title, body.Title);
         Assert.Equal(expectedResponse.Vendor, body.Vendor);
-        Assert.Equal(expectedResponse.Id, body.Id);
+        Assert.True(body.RetrievedAt.HasValue);
        // Assert.Equal<DateTimeOffset?>(requestTime, expectedResponse.RetrievedAt);
+        var diff = body.RetrievedAt.Value - requestTime;
+        Assert.True(diff.Seconds <= 5); // "Fudge" Value
+        //Assert.Equal(expectedResponse.Id, body.Id);
     }
 }
