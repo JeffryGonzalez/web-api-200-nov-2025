@@ -30,15 +30,15 @@ public class EmployeeIssueProjection : SingleStreamProjection<EmployeeIssueReadM
     
     public static EmployeeIssueReadModel Apply(VipIssueReported @event, EmployeeIssueReadModel model)
     {
-        return model with { VipStatus = "Is Vip", };
+        return model with { VipStatus = "Is Vip", VipStatusChecked = true, Status = model.SoftwareChecked ? IssueStatus.AwaitingTechAssignment : model.Status};
     }
 
     public static EmployeeIssueReadModel Apply(SupportedSoftwareReported @event,  EmployeeIssueReadModel model)
     {
-        return model with {  Software = @event.Item, SoftwareChecked = true};
+        return model with {  Software = @event.Item, SoftwareChecked = true, Status = model.VipStatusChecked ? IssueStatus.AwaitingTechAssignment : model.Status};
     }
     public static EmployeeIssueReadModel Apply(UnsupportedSoftwareReported @event, EmployeeIssueReadModel model)
     {
-        return model with { SoftwareMessage = "Unsupported Software", VipStatusChecked = true};
+        return model with { SoftwareMessage = "Unsupported Software", SoftwareChecked = true, Status = model.VipStatusChecked ? IssueStatus.AwaitingTechAssignment : model.Status};
     }
 }

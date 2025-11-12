@@ -40,8 +40,8 @@ POST http://localhost:1338/employee/issues
 Content-Type: application/json
 
 {
-    "softwareId": "e1650e49-df81-421f-bfd0-ad081b71c319",
-    "description": "Another One From Jeff Where It Isn't There",
+    "softwareId": "f81dbfab-2a30-4e76-98e4-d1a67799711e",
+    "description": "Another One From Jeff Where It is About Rider",
     "impact": "WorkStoppage",
     "impactRadius": "Customer",
     "contactMechanisms": {
@@ -61,6 +61,9 @@ GET http://localhost:1338/employee/issues/58e4daf4-a450-4ce6-bd34-cb4a294002d4
 GET http://localhost:1338/employee/issues
 ```
 
+```http
+GET http://localhost:1338/issues-awaiting-tech-assignment
+```
 ## Response
 
 ```http

@@ -1,4 +1,5 @@
 ﻿using HelpDesk.Api.Employee.Data;
+using HelpDesk.Api.Employee.Handlers;
 using HelpDesk.Api.Employee.Models;
 using HelpDesk.Api.HttpClients;
 using HelpDesk.Api.Services;
@@ -33,7 +34,7 @@ public class IssuesController : ControllerBase
 
        
 
-        var response = new IssueCreateResponseModel
+        var response = new EmployeeIssueReadModel
         {
             Id = Guid.NewGuid(),
             ContactMechanisms = request.ContactMechanisms,
@@ -41,7 +42,10 @@ public class IssuesController : ControllerBase
             Description = request.Description,
             Impact = request.Impact,
             ImpactRadius = request.ImpactRadius,
-            SoftwareId = request.SoftwareId,
+            Software = new SoftwareCatalogItem()
+            {
+                Id = request.SoftwareId
+            },
             SubmittedBy = await userIdentity.GetUserIdFromRequestingContextAsync()
         };
 
@@ -56,7 +60,8 @@ public class IssuesController : ControllerBase
     [HttpGet("/employee/issues/{id:guid}")]
     public async Task<ActionResult> GetIssueAsync(Guid id,[FromServices] IDocumentSession session)
     {
-        var response = await session.Events.AggregateStreamAsync<IssueCreateResponseModel>(id);
+        var response = await session.Events.AggregateStreamAsync<EmployeeIssueReadModel>(id);
+        // Todo: AuthZ - should only be able to retrieve your own issue
         if(response is null)
         {
             return NotFound("Nope - nothing");
@@ -64,5 +69,26 @@ public class IssuesController : ControllerBase
         {
             return Ok(response);
         }
+    }
+
+    [HttpGet("/employee/issues/")]
+    public async Task<ActionResult> GetIssuesAsync([FromServices] IDocumentSession session,
+        [FromServices] IManageUserIdentity userIdentity)
+    {
+        var userId = await userIdentity.GetUserIdFromRequestingContextAsync();
+        var issues = await session.Query<EmployeeIssueReadModel>()
+            .Where(i => i.SubmittedBy == userId)
+            .ToListAsync();
+        return Ok(issues);
+    }
+
+    [HttpGet("/issues-awaiting-tech-assignment")]
+    public async Task<ActionResult> GetIssueAwaitingTechAssignmentAsync([FromServices] IDocumentSession session)
+    {
+        var issues = await session.Query<EmployeeIssueReadModel>()
+            .Where(issue => issue.Status == IssueStatus.AwaitingTechAssignment)
+            .OrderBy(issue => issue.AssignedPriority)
+            .ToListAsync();
+        return Ok(issues);
     }
 }

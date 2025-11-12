@@ -1,6 +1,6 @@
 using Marten;
 
-namespace HelpDesk.Api.Employee;
+namespace HelpDesk.Api.Employee.Handlers;
 
 public class VipStatusHandler
 {

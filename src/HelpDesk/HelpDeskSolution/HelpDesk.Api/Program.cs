@@ -4,6 +4,7 @@ using HelpDesk.Api.Employee.BackgroundWorker;
 using HelpDesk.Api.Employee.Models;
 using HelpDesk.Api.HttpClients;
 using HelpDesk.Api.Services;
+using JasperFx.Events.Projections;
 using Marten;
 using Wolverine;
 using Wolverine.Marten;
@@ -59,7 +60,8 @@ builder.AddNpgsqlDataSource("issues");
 builder.Services.AddMarten(opts =>
 {
     //opts.Connection(connectionString); // Come back to this.
-   })
+    opts.Projections.Add<EmployeeIssueProjection>(ProjectionLifecycle.Inline);
+})
     .IntegrateWithWolverine()
     .UseNpgsqlDataSource()
     .UseLightweightSessions();

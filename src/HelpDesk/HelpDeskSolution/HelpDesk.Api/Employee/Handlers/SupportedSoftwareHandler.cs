@@ -1,7 +1,7 @@
 using HelpDesk.Api.HttpClients;
 using Marten;
 
-namespace HelpDesk.Api.Employee;
+namespace HelpDesk.Api.Employee.Handlers;
 
 public class SupportedSoftwareHandler
 {
@@ -12,7 +12,7 @@ public class SupportedSoftwareHandler
         var response = await softwareApi.ValidateSoftwareItemFromCatalogAsync(command.SoftwareId);
         if (response is not null)
         {
-            session.Events.Append(command.IssueId, new SupportedSoftwareReported(response.Title, response.Vendor));
+            session.Events.Append(command.IssueId, new SupportedSoftwareReported(response));
             
         }
         else

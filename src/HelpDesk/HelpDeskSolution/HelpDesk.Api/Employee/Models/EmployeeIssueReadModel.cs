@@ -1,21 +1,22 @@
 ﻿using HelpDesk.Api.Employee.Data;
-using HelpDesk.Api.Employee.Handlers;
+using HelpDesk.Api.HttpClients;
 
 namespace HelpDesk.Api.Employee.Models;
 
-public record IssueCreateResponseModel
+public record EmployeeIssueReadModel
 {
     public Guid Id { get; set; }
     public int Version { get; set; }
     public string Description { get; init; } = string.Empty;
     public IssueImpact Impact { get; init; }
     public IssueImpactRadius ImpactRadius { get; init; }
-    public Guid SoftwareId { get; set; }
 
-    public string? SoftwareTitle { get; set; } = null;
-    public string? SoftwareVendor { get; set; } = null;
+    public SoftwareCatalogItem Software { get; set; } = new();
+    
     public string? SoftwareMessage { get; set; } = null;
     public string? VipStatus { get; set; } = null;
+    public bool SoftwareChecked { get; set; }
+    public bool VipStatusChecked { get; set; }
 
     public int AssignedPriority
     {
@@ -32,10 +33,11 @@ public record IssueCreateResponseModel
                 startingPriority += 50;
             }
 
-            if (VipStatus != null)
+            if (VipStatusChecked)
             {
                 startingPriority += 500;
             }
+            
             return startingPriority;
         }
     }
@@ -45,42 +47,11 @@ public record IssueCreateResponseModel
     public IssueContactMechanism ContactMechanisms { get; init; } = new();
     public IssueContactPreferences ContactPreferences { get; init; }
 
-    public IssueStatus Status
-    {
-        get
-        {
-            if ((SoftwareTitle != null && SoftwareVendor != null) || SoftwareMessage != null && VipStatus != null)
-            {
-                return IssueStatus.AwaitingVerification;
-            }
-            else
-            {
-                return IssueStatus.AwaitingVerification;
-            }
-        }
-    }
+    public IssueStatus Status { get; set; } = IssueStatus.AwaitingVerification;
 
-    public static IssueCreateResponseModel Create(EmployeeSubmittedIssue @event)
-    {
-        var issue = new IssueCreateResponseModel
-        {
-            Id = @event.Issue.Id,
-            ContactMechanisms = @event.Issue.ContactMechanisms,
-            ContactPreferences = @event.Issue.ContactPreferences,
-         
-            Description = @event.Issue.Description,
-            Impact = @event.Issue.Impact,
-            ImpactRadius = @event.Issue.ImpactRadius,
-            SoftwareId = @event.Issue.SoftwareId,
-            SubmittedBy = @event.Issue.SubmittedBy,
-           
-           
-        };
-       
-        return issue;
-    }
+   
 
-    private static int GetPriority(IssueCreateResponseModel model)
+    private static int GetPriority(EmployeeIssueReadModel model)
     {
         var startingPriority = 0;
         if (model.Impact == IssueImpact.WorkStoppage)
@@ -100,17 +71,4 @@ public record IssueCreateResponseModel
         return startingPriority;
     }
    
-    public static IssueCreateResponseModel Apply(VipIssueReported @event, IssueCreateResponseModel model)
-    {
-        return model with { VipStatus = "Is Vip", };
-    }
-
-    public static IssueCreateResponseModel Apply(SupportedSoftwareReported @event,  IssueCreateResponseModel model)
-    {
-        return model with {  SoftwareTitle = @event.Title, SoftwareVendor = @event.Vendor };
-    }
-    public static IssueCreateResponseModel Apply(UnsupportedSoftwareReported @event, IssueCreateResponseModel model)
-    {
-        return model with { SoftwareMessage = "Unsupported Software" };
-    }
 }
