@@ -8,7 +8,7 @@ public class SoftwareCenter(HttpClient client, TimeProvider clock) : ILookupSoft
         // Todo: think about doing a consumer/provider pattern - later.
         // [HttpGet("/catalog-items/{id:guid}"]
 
-        var response = await client.GetAsync("/catalog-items/" + softwareId);
+        var response = await client.GetAsync("/help-desk/catalog-items/" + softwareId);
 
 
 

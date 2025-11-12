@@ -31,7 +31,7 @@ public class GettingSoftwareMockedApi(DemoFixture fixture)
         fixture.MockServer.Given(
             Request.Create()
             .UsingMethod("GET")
-            .WithPath($"/catalog-items/{softwareId}")) // this was the bug - duh.
+            .WithPath($"/help-desk/catalog-items/{softwareId}")) // this was the bug - duh.
             .RespondWith(
                 Response.Create()
                 .WithStatusCode(200)
