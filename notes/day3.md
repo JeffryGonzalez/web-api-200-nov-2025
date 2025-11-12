@@ -13,14 +13,60 @@
 
 - Moving to Docker Compose Fix
   - The Problem seems to be mostly the VMs - nested virtualization
-- Event Sourcing
+    - Tried it on two other non-virtualized computers - no problem.
+    - Docker uses "nested virtualization" on VMs with Windows - so weird.
+    - Moved to a new Docker Compose file - also added a volume (you can do this with Aspire database resources, too)
+    - Do This: 
+      - Reset Docker Compose - down, remove volume, up.
+    - Switched to adminer from PG Admin (http://localhost:8080) - use "user" and "password" after setting to Postgres
+  - The "resources" in Aspire often represent test-doubles that will be part of your production (or test) environment that are not usually deployed as part of your application.
+    - Databases - most databases do not run in prod in containers.
+    - External Services: 
+      - `var nuget = builder.AddExternalService("nuget", "https://api.nuget.org/").WithHttpHealthCheck(path: "/v3/index.json");`
+- Mocking/Stubbing External Resources
+  - In Aspire with the `builder.AddWireMock(...)`
+  - About WireMock
+    - Used tons - originally Java. 
+    - Can record and replay
+    - Introducing Faults
+  - In Tests
+    - Using WireMock in Tests. 
+    - Demo: 
+      - In the test, switch the user identity manager to the "real" one. (ConfigureTestServices)
+      - Make a call to add an Issue.
+- Event Sourcing Review
   - Building up states from a series of events over time.
   - "We want to show what the issue is after all these things have happened"
-  - Projections
-    - Inline Projections - Create the Read Model based on demand - it is not stored.
+  - Projections:
+    - Dynamic Projections
+      - Inline Projections - Create the Read Model based on demand - it is not stored.
     - Live Projections - Every time an event happens the read model is updated immediately (as part of the same projection)
-    - Async Projections - Runs in a separate process or even other "nodes". Eventual Consistency. More Scalable.
-- Code Changes
-  - Cleaned Up The Handlers
-  - Created a SingleStream Projection
-  - 
+    - Materialized Projections
+      - Async Projections - Runs in a separate process or even other "nodes". Eventual Consistency. More Scalable.
+      - Demo:
+        - Review Code Changes from last night.
+        - Show Endpoints
+          - `/issues-awaiting-tech-assignment`
+            - This one should *not* show pending VIP assignments
+          - Add an `/issues-awaiting-vip-assignment` endpoint. 
+          - Where should these endpoints "live"? 
+        - Live Projection: Create a Projection that shows the history of an issue - and time traveling
+        - How will issues be removed from the "awaiting" buckets?
+          - Adopted by a tech.
+          - Versions.
+    - This is great stuff - but even if you don't use it, it's important to know the concept and be able to differentiate it from
+      - Event Streaming (aka Kafka, etc.) - more on this in the next class. A key way to "liberate" data.
+- Consumer-Driven Contracts - the software.api
+  - Difference between this an "open host"
+  - Securing
+  - Implement this on the Software API.
+    - In the AppHost 
+      - Remove the mocks
+      - Replace with `builder.AddExternalService` with `health check`
+- Moving on to VIPs
+  - Work in the Handler
+  - Create an Typed HTTP Client
+  - How will we see if someone is a VIP?
+- Lab
+  - Implementing the HelpDeskVips.Api
+  - This afternoon.
