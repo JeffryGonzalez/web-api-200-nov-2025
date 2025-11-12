@@ -41,7 +41,7 @@ Content-Type: application/json
 
 {
     "softwareId": "f81dbfab-2a30-4e76-98e4-d1a67799711e",
-    "description": "Another One From Jeff Where It is About Rider",
+    "description": "Another One From Jeff Where It is About Riderxxxxx",
     "impact": "WorkStoppage",
     "impactRadius": "Customer",
     "contactMechanisms": {
