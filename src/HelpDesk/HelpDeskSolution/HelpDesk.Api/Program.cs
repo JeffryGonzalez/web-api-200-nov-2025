@@ -45,7 +45,7 @@ builder.Services.AddControllers() // this is optional, we don't have to use cont
 
 builder.Services.AddHttpContextAccessor(); // In a service we create, we can access the HTTP context.
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton(_ => TimeProvider.System); // this is for the "clock"
+builder.Services.AddSingleton<TimeProvider>(_ => TimeProvider.System); // this is for the "clock"
 
 if (builder.Environment.IsDevelopment())
 {

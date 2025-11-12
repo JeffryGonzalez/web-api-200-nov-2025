@@ -18,5 +18,23 @@ public class GettingSomeSoftwareController(ILookupSoftwareFromTheSoftwareApi sof
             return Ok(response);
         }
     }
+
+    [HttpGet("/demos/still-open")]
+    public async Task<ActionResult> AreWeStillOpen(
+        [FromServices] TimeProvider clock)
+    {
+        var now = clock.GetLocalNow();
+        if(now.Hour<17)
+        {
+            return Ok(new BusinessHoursResponse { StillOpen = true });
+        } else
+        {
+            return Ok(new BusinessHoursResponse {  StillOpen =false });
+        }
+    }
 }
 
+public record BusinessHoursResponse
+{
+    public bool StillOpen { get; set; }
+}

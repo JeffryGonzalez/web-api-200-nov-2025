@@ -15,13 +15,13 @@ public class SoftwareCenter(HttpClient client, TimeProvider clock) : ILookupSoft
 
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            var d = response.Headers.Date;
+   
             var responseDate = response.Headers.Date ?? DateTime.MinValue;
             var returnedBody = await response.Content.ReadFromJsonAsync<SoftwareCenterResponse>();
             if (returnedBody is null) return null; // todo: think about this - something bad.
             var mappedResponse = new SoftwareCatalogItem
             {
-                //Id = softwareId,
+                Id = softwareId,
                 Title = returnedBody.Title,
                 Vendor = returnedBody.Vendor,
                 RetrievedAt = responseDate
@@ -41,6 +41,10 @@ public class SoftwareCenter(HttpClient client, TimeProvider clock) : ILookupSoft
 
     }
 }
+
+// part of the contract or "pact" I'm going to have with the software center
+// in this case, "they" are going to use this to fulfill this contract.
+// It could ALSO be something that is already there...
 
 public record SoftwareCenterResponse
 {
