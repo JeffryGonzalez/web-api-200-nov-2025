@@ -40,8 +40,8 @@ POST http://localhost:1338/employee/issues
 Content-Type: application/json
 
 {
-    "softwareId": "f81dbfab-2a30-4e76-98e4-d1a67799711e",
-    "description": "Another One From Jeff Where It is About Riderxxxxx",
+    "softwareId": "e1650e49-df81-421f-bfd0-ad081b71c319",
+    "description": "Arms week event is too hard. Riderxxxxx",
     "impact": "WorkStoppage",
     "impactRadius": "Customer",
     "contactMechanisms": {
@@ -54,7 +54,12 @@ Content-Type: application/json
 ```
 
 ```http
-GET http://localhost:1338/employee/issues/2d515ad5-15ba-499d-9c8c-ecd37ac1a964
+GET http://localhost:1338/demos/software/f81dbfab-2a30-4e76-98e4-d1a67799711e
+```
+
+
+```http
+GET http://localhost:1338/employee/issues/b24c3e0b-96b8-4cec-a080-1c26fac56208
 ```
 
 ```http

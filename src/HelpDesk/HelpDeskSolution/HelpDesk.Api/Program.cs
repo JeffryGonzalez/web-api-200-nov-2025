@@ -25,6 +25,11 @@ builder.Services.AddHttpClient<SoftwareCenter>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["services:software:http:0"]); // obviously fake.. 
 });
+builder.Services.AddScoped<ILookupSoftwareFromTheSoftwareApi>(b =>
+{
+    // this is a provider factory 
+    return b.GetRequiredService<SoftwareCenter>();
+});
 
 builder.Services.AddAuthentication().AddJwtBearer(); // Authentication - Finding out who someone is
 builder.Services.AddControllers() // this is optional, we don't have to use controllers. 

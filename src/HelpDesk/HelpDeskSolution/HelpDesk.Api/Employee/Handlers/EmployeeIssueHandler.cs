@@ -17,7 +17,7 @@ public class EmployeeIssueHandler // some magic here - this class MUST end with 
         return
         [
             new CheckForVipStatus(command.EmployeeIssue.Id, command.EmployeeIssue.SubmittedBy),
-            new CheckForSupportedSoftware(command.EmployeeIssue.Id, command.EmployeeIssue.Software.Id!.Value)
+            new CheckForSupportedSoftware(command.EmployeeIssue.Id, command.EmployeeIssue.Software.Id)
         ];
       
     }

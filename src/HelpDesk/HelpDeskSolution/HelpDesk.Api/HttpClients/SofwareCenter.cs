@@ -1,24 +1,32 @@
 ﻿namespace HelpDesk.Api.HttpClients;
 
 // Typed HttpClients 
-public class SoftwareCenter(HttpClient client, TimeProvider clock)
+public class SoftwareCenter(HttpClient client, TimeProvider clock) : ILookupSoftwareFromTheSoftwareApi
 {
     public async Task<SoftwareCatalogItem?> ValidateSoftwareItemFromCatalogAsync(Guid softwareId)
     {
         // Todo: think about doing a consumer/provider pattern - later.
         // [HttpGet("/catalog-items/{id:guid}"]
+
         var response = await client.GetAsync("/catalog-items/" + softwareId);
+
 
 
 
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            var responseDate = response.Headers.Date;
-            var returnedBody = await response.Content.ReadFromJsonAsync<SoftwareCatalogItem>();
+            var d = response.Headers.Date;
+            var responseDate = response.Headers.Date ?? DateTime.MinValue;
+            var returnedBody = await response.Content.ReadFromJsonAsync<SoftwareCenterResponse>();
             if (returnedBody is null) return null; // todo: think about this - something bad.
-            returnedBody.RetrievedAt = responseDate ?? clock.GetUtcNow();
-            returnedBody.Id = softwareId;
-            return returnedBody;
+            var mappedResponse = new SoftwareCatalogItem
+            {
+                //Id = softwareId,
+                Title = returnedBody.Title,
+                Vendor = returnedBody.Vendor,
+                RetrievedAt = responseDate
+            };
+            return mappedResponse;
         }
 
         // if we haven't already handled this, then it is some other Http Error - let resiliency handle it.
@@ -34,9 +42,14 @@ public class SoftwareCenter(HttpClient client, TimeProvider clock)
     }
 }
 
+public record SoftwareCenterResponse
+{
+    public string? Title { get; init; }
+    public string? Vendor { get; init; }
+}
 public record SoftwareCatalogItem
 {
-    public Guid? Id { get; set; }
+    public Guid Id { get; set; }
     public DateTimeOffset? RetrievedAt { get; set; }
     public string? Title { get; init; } 
     public string? Vendor { get; init; } 
