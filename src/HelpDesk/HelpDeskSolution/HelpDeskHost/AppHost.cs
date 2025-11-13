@@ -22,10 +22,6 @@ var softwareApiMocks = builder.AddWireMock("software")
 // so I'm just going to have it return 404 for every call for right now.
 
 
-var softwareCenter = builder.AddExternalService("software-center", "http://localhost:1337");
-   
-   
-            
 
 var postgres = builder.AddPostgres("postgres")
     .WithImage("postgres:17.5-bullseye")
@@ -57,8 +53,7 @@ builder.AddYarp("gateway") // create one url that will "proxy" to these services
     .WithConfiguration(yarp =>
     {
         yarp.AddRoute(issuesApi); // go here as the "root"
-        yarp.AddRoute("/catalog/{**catchAll}", softwareCenter)
-         .WithTransformPathRemovePrefix("/catalog");
+      
 
         yarp.AddRoute("/vips/{**catchAll}", vipApi) // but if the path starts with "vips" go here
             .WithTransformPathRemovePrefix("/vips") // but remove that prefix before sending it.
