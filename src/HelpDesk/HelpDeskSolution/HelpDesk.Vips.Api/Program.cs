@@ -8,7 +8,7 @@ using Wolverine.Marten;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddOpenApi();
 builder.AddServiceDefaults();
 // Add services to the container.
 builder.UseWolverine(options =>
@@ -28,7 +28,7 @@ builder.Services.AddControllers() .AddJsonOptions(options =>
     options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
 });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
 builder.Services.AddSingleton<TimeProvider>(_ => TimeProvider.System); 
 builder.AddNpgsqlDataSource("vips");
 builder.Services.AddMarten(opts =>
@@ -49,9 +49,9 @@ app.MapControllers();
 if (app.Environment.IsDevelopment()) // Environment Variable on your machine called ASPNETCORE_ENVIRONMENT
 {
     app.MapOpenApi();
+
     app.MapScalarApiReference();
 }
-
 
 
 

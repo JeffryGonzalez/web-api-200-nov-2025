@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HelpDesk.Vips.Api.Management;
 
 // [Authorize(Role="HelpDeskVipManagers")]
+[ApiController]
 public class ManagementController(IDocumentSession session) : ControllerBase
 {
     [HttpGet("/management/vips")]

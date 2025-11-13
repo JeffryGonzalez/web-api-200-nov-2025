@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HelpDesk.Vips.Api.HelpDesk;
 
 // [Authorize(Role="HelpDeskApi")]
+[ApiController]
 public class VipController : ControllerBase
 {
     [HttpPost("/vip-check")]
