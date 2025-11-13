@@ -1,0 +1,6 @@
+@HelpDesk.Vips.Api_HostAddress = http://localhost:5038
+
+GET {{HelpDesk.Vips.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,20 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "WildcardMatcher",
+          "Pattern": "/catalog-items/f81dbfab-2a30-4e76-98e4-d1a67799711e"
+        }
+      ]
+    },
+    "Methods": ["get"]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": "{\"title\":\"Rider\",\"vendor\":\"JetBrains\"}"
+  }
+}

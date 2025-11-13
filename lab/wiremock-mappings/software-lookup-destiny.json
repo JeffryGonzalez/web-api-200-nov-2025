@@ -1,0 +1,20 @@
+{
+  "Request": {
+    "Path": {
+      "Matchers": [
+        {
+          "Name": "WildcardMatcher",
+          "Pattern": "/catalog-items/e1650e49-df81-421f-bfd0-ad081b71c319"
+        }
+      ]
+    },
+    "Methods": ["get"]
+  },
+  "Response": {
+    "StatusCode": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": "{\"title\":\"Destiny 2\",\"vendor\":\"Bungie\"}"
+  }
+}

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: help-desk-issues-api-service
+spec:
+  selector:
+    app: help-desk-issues-api
+  ports:
+  - port: 80
+    targetPort: 8080
