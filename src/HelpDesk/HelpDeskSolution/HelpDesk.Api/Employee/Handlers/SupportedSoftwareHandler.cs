@@ -6,7 +6,7 @@ namespace HelpDesk.Api.Employee.Handlers;
 public class SupportedSoftwareHandler
 {
     public async Task Handle(CheckForSupportedSoftware command, 
-        SoftwareCenter softwareApi,
+        SoftwareCenterApiClient softwareApi,
         IDocumentSession session)
     {
         var response = await softwareApi.ValidateSoftwareItemFromCatalogAsync(command.SoftwareId);

@@ -28,6 +28,7 @@ var issuesDb = postgres.AddDatabase("issues");
 builder.AddProject<Projects.HelpDesk_Api>("helpdesk-api")
     .WithExternalHttpEndpoints()
     .WithReference(softwareApiMocks)
-    .WithReference(issuesDb);
+    .WithEnvironment("services__vip__http__0", softwareApiMocks.GetEndpoint("http"))
+    .WithReference(issuesDb).WaitFor(issuesDb);
 
 builder.Build().Run();

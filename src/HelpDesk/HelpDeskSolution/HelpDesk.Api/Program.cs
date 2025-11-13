@@ -1,6 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using HelpDesk.Api.Employee.BackgroundWorker;
+using HelpDesk.Api;
 using HelpDesk.Api.Employee.Models;
 using HelpDesk.Api.HttpClients;
 using HelpDesk.Api.Services;
@@ -15,21 +15,24 @@ builder.AddServiceDefaults(); // this adds the resiliency handers - https://lear
 
 builder.UseWolverine(options =>
 {
-    // come back to this.
-    options.Policies.UseDurableLocalQueues(); 
-    // This means all commands that are sent for processing are saved in the database
-    // and will be "tracked" on whether they were handled or not.
+    options.Policies.UseDurableLocalQueues();
+    options.Durability.Mode = DurabilityMode.Solo;
 });
 
-builder.Services.AddHttpClient<SoftwareCenter>(client =>
+builder.Services.AddHttpClient<SoftwareCenterApiClient>(client =>
 {
     var serviceAddress = builder.Configuration["services:software:http:0"] ?? throw new Exception("No SoftwareCenter is configured");
+    client.BaseAddress = new Uri(serviceAddress); 
+});
+builder.Services.AddHttpClient<VipApiClient>(client =>
+{
+    var serviceAddress = builder.Configuration["services:vips:http:0"] ?? throw new Exception("No SoftwareCenter is configured");
     client.BaseAddress = new Uri(serviceAddress); 
 });
 builder.Services.AddScoped<ILookupSoftwareFromTheSoftwareApi>(b =>
 {
     // this is a provider factory 
-    return b.GetRequiredService<SoftwareCenter>();
+    return b.GetRequiredService<SoftwareCenterApiClient>();
 });
 
 builder.Services.AddAuthentication().AddJwtBearer(); // Authentication - Finding out who someone is
@@ -108,6 +111,13 @@ app.UseAuthentication();  // use authentication middleware - look at incoming re
 app.UseAuthorization(); // setting policies about who can do what.
 // go look at all my classes, look for the [HttpX] attributes, and create the routing table.
 app.MapControllers();
+
+
+
+if (app.Environment.IsDevelopment())
+{
+    await app.SeedUsers();
+}
 
 app.Run();
 

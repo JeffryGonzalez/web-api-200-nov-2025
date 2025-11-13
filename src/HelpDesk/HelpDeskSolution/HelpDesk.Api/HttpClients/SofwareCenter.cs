@@ -1,7 +1,7 @@
 ﻿namespace HelpDesk.Api.HttpClients;
 
 // Typed HttpClients 
-public class SoftwareCenter(HttpClient client, TimeProvider clock) : ILookupSoftwareFromTheSoftwareApi
+public class SoftwareCenterApiClient(HttpClient client, TimeProvider clock) : ILookupSoftwareFromTheSoftwareApi
 {
     public async Task<SoftwareCatalogItem?> ValidateSoftwareItemFromCatalogAsync(Guid softwareId)
     {
