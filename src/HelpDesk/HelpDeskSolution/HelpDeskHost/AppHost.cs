@@ -1,3 +1,5 @@
+
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 
@@ -6,10 +8,14 @@ if(!Directory.Exists(mappingPath))
 {
     throw new Exception("Can't Find Mapping File");
 }
+
 var softwareApiMocks = builder.AddWireMock("software")
     .WithMappingsPath(mappingPath)
     .WithReadStaticMappings()
     .WithWatchStaticMappings();
+   
+   
+            
 
 var postgres = builder.AddPostgres("postgres")
     .WithImage("postgres:17.5-bullseye")

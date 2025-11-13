@@ -13,20 +13,20 @@ public class VipApiClient(HttpClient client, IDocumentSession session)
             .SingleOrDefaultAsync();
         if (userSub == null)
         {
-            return false; // maybe throw?
+            return false; // maybe throw? dispatch an event?
         }
 
         var request = new VipRequestMessage()
         {
             UserSubject = userSub.Name
         };
-        var response = await client.PostAsJsonAsync($"/vips/{userSub.Name}", request);
+        var response = await client.PostAsJsonAsync($"/vip-check", request);
         switch (response.StatusCode)
         {
             case HttpStatusCode.OK:
-                return true;
-            case HttpStatusCode.NotFound:
-                return false;
+                var body = await response.Content.ReadFromJsonAsync<VipResponseMessage>();
+                return body is not null && body.IsVip;
+            
             default:
                 response.EnsureSuccessStatusCode();
                 return false;
