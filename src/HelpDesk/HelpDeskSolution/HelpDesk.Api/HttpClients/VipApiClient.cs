@@ -13,7 +13,7 @@ public class VipApiClient(HttpClient client, IDocumentSession session)
             .SingleOrDefaultAsync();
         if (userSub == null)
         {
-            return false; // maybe throw? dispatch an event?
+            return false; // maybe throw? dispatch an event? throw a new ChaosException("VipClient tried to process an unknown user, this should never happen");
         }
 
         var request = new VipRequestMessage()
@@ -28,7 +28,7 @@ public class VipApiClient(HttpClient client, IDocumentSession session)
                 return body is not null && body.IsVip;
             
             default:
-                response.EnsureSuccessStatusCode();
+                //response.EnsureSuccessStatusCode();
                 return false;
         }
     }

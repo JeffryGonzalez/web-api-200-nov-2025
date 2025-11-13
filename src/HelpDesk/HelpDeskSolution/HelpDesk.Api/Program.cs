@@ -16,7 +16,7 @@ builder.AddServiceDefaults(); // this adds the resiliency handers - https://lear
 builder.UseWolverine(options =>
 {
     options.Policies.UseDurableLocalQueues();
-    options.Durability.Mode = DurabilityMode.Solo;
+    options.Durability.Mode = DurabilityMode.Solo; // Default is just slower to start
 });
 
 builder.Services.AddHttpClient<SoftwareCenterApiClient>(client =>
@@ -39,6 +39,8 @@ builder.Services.AddAuthentication().AddJwtBearer(); // Authentication - Finding
 builder.Services.AddControllers() // this is optional, we don't have to use controllers. 
     .AddJsonOptions(options =>
     {
+        // it has the Json CamelCase Naming Policy added by default.
+        //options.JsonSerializerOptions.Converters.Add(JsonNamingPolicy)
         // Allows you to send enum values as string and serializes them as strings.
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         // in Json, if a property doesn't exist, it's the same as returning it with a null value

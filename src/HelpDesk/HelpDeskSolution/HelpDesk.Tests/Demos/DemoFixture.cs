@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using Alba;
-using HelpDesk.Api;
 using HelpDesk.Api.Services;
 using Marten;
 using Microsoft.Extensions.DependencyInjection;

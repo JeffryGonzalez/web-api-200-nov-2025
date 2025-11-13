@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="Alba" Version="8.3.0" />
+        <PackageReference Include="Aspire.Hosting.Testing" Version="9.5.2" />
         <PackageReference Include="coverlet.collector" Version="6.0.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -34,6 +35,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\HelpDesk.Api\HelpDesk.Api.csproj" />
+      <ProjectReference Include="..\HelpDeskHost\HelpDeskHost.csproj" />
     </ItemGroup>
 
 </Project>
