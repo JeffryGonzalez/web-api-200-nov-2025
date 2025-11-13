@@ -1,5 +1,6 @@
 using System.Net;
 using HelpDesk.Api.Services;
+using HelpDesk.Common.Vips;
 using Marten;
 
 namespace HelpDesk.Api.HttpClients;
@@ -33,15 +34,3 @@ public class VipApiClient(HttpClient client, IDocumentSession session)
         }
     }
 }
-
-public record VipRequestMessage
-{
-    public required string UserSubject { get; init; }
-}
-
-public record VipResponseMessage
-{
-    public required string UserSubject { get; init; }
-    public required bool IsVip { get; init; }
-}
-

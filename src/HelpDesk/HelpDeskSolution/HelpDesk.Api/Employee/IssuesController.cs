@@ -105,6 +105,7 @@ public class IssuesController : ControllerBase
         [FromServices] IDocumentSession session,
         [FromQuery] long version = -1)
     {
+        //session.BarkLikeADog("Loud"); // early bound means that the call is in process and call be verified by a compiler, etc.
         IssueHistoryReadModel? response;
         if(version == -1)
         {

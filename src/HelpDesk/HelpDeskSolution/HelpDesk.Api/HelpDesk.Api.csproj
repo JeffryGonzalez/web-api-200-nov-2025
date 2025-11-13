@@ -18,6 +18,7 @@
         <PackageReference Include="WolverineFx.Marten" Version="5.1.0" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\HelpDesk.Common\HelpDesk.Common.csproj" />
       <ProjectReference Include="..\HelpDesk.ServiceDefaults\HelpDesk.ServiceDefaults.csproj" />
     </ItemGroup>
 

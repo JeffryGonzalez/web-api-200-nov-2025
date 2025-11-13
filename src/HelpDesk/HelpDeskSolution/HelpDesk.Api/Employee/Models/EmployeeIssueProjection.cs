@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using HelpDesk.Api.Employee.Data;
 using HelpDesk.Api.Employee.Handlers;
 using HelpDesk.Api.HttpClients;
@@ -31,6 +32,12 @@ public class EmployeeIssueProjection : SingleStreamProjection<EmployeeIssueReadM
     public static EmployeeIssueReadModel Apply(VipIssueReported @event, EmployeeIssueReadModel model)
     {
         return model with { VipStatus = "Is Vip", VipStatusChecked = true, Status = model.SoftwareChecked ? IssueStatus.AwaitingTechAssignment : model.Status};
+    }
+
+    public static EmployeeIssueReadModel Apply(NonVipIssueReported @event, EmployeeIssueReadModel model)
+    {
+        return model with { VipStatus = "Non Vip", VipStatusChecked = true, Status = model.SoftwareChecked ? IssueStatus.AwaitingTechAssignment : model.Status}
+        ;
     }
 
     public static EmployeeIssueReadModel Apply(SupportedSoftwareReported @event,  EmployeeIssueReadModel model)

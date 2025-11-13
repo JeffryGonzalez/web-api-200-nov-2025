@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HelpDesk.Api\HelpDesk.Api.csproj" />
+    <ProjectReference Include="..\HelpDesk.Vips.Api\HelpDesk.Vips.Api.csproj" />
   </ItemGroup>
 
 </Project>

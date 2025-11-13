@@ -26,7 +26,8 @@ builder.Services.AddHttpClient<SoftwareCenterApiClient>(client =>
 });
 builder.Services.AddHttpClient<VipApiClient>(client =>
 {
-    var serviceAddress = builder.Configuration["services:vips:http:0"] ?? throw new Exception("No SoftwareCenter is configured");
+    //services__vip-api__http__0
+    var serviceAddress = builder.Configuration["services:vip-api:http:0"] ?? throw new Exception("No SoftwareCenter is configured");
     client.BaseAddress = new Uri(serviceAddress); 
 });
 builder.Services.AddScoped<ILookupSoftwareFromTheSoftwareApi>(b =>

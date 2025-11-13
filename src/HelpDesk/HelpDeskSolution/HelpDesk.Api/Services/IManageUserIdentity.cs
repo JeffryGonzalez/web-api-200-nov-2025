@@ -42,7 +42,7 @@ public class DevelopmentOnlyUserIdentityFakeProvider : IManageUserIdentity
 {
     public Task<Guid> GetUserIdFromRequestingContextAsync()
     {
-        return Task.FromResult(Guid.Parse("9be7c56a-45cb-43df-960a-4eed2c7ce147"));
+        return Task.FromResult(Guid.Parse("2F227AD9-B448-4616-9057-05E7763716EA")); // bob
     }
 }
 
