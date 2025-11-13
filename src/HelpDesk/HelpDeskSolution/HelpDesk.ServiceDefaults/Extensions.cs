@@ -1,8 +1,12 @@
+using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.ServiceDiscovery;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
@@ -16,7 +20,19 @@ public static class Extensions
 {
     private const string HealthEndpointPath = "/health";
     private const string AlivenessEndpointPath = "/alive";
-
+    
+    //public static void AddControllerJsonOptions(this IMvcBuilder m)
+    //{
+    //    m.op
+    //    // it has the Json CamelCase Naming Policy added by default.
+    //    //options.JsonSerializerOptions.Converters.Add(JsonNamingPolicy)
+    //    // Allows you to send enum values as string and serializes them as strings.
+    //    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    //    // in Json, if a property doesn't exist, it's the same as returning it with a null value
+    //    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    //    // one more option
+    //    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+    //}
     public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         builder.ConfigureOpenTelemetry();

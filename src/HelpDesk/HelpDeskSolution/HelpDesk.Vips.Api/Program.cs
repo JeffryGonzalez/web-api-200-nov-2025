@@ -16,6 +16,8 @@ builder.UseWolverine(options =>
     options.Policies.UseDurableLocalQueues();
     options.Durability.Mode = DurabilityMode.Solo; // Default is just slower to start
 });
+
+// these kind of things you can put in your service defaults - so all projects are using the same config.
 builder.Services.AddControllers() .AddJsonOptions(options =>
 {
     // it has the Json CamelCase Naming Policy added by default.

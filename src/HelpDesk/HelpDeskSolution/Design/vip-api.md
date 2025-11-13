@@ -9,7 +9,7 @@ We check for VIPs by sending a request, and getting a response for each new issu
 Example:
 
 ```http
-POST /vip-check
+POST http://localhost:5038/vip-check
 Content-Type: application/json
 
 {
@@ -45,11 +45,11 @@ They want a way to get a list of all VIPs, both active and inactive.
 ## Adding VIPS
 
 ```http
-POST http://localhost:5038/management/vips HTTP/1.1
+POST http://localhost:59859/vips/management/vips HTTP/1.1
 Host: localhost
 Content-Type: application/json
 
-{"userSubject":"","reason":""}
+{"userSubject":"jeff@aol.com","reason":"He is Rad"}
 ```
 
 Should return:
@@ -57,8 +57,8 @@ Should return:
 ```json
 {
   "id": "123e4567-e89b-12d3-a456-426614174000",
-  "userSubject": "string",
-  "reason": "string",
+  "userSubject": "jeff@aol.com",
+  "reason": "He is Rad",
   "created": "2025-11-13T18:27:58.261Z"
 }
 ```
@@ -88,3 +88,13 @@ See the rest of the docs for examples.
 
 After you are done with this, make the /vip-check endpoint "real"
 
+## Optionally - (it's all optional, I turned in the grades already. Almost everyone got an A. ;))
+
+- Add Tests for the Vip API
+- Add Validators for the incoming messages
+
+
+
+```http
+http://localhost:63858/catalog/catalog-items
+```

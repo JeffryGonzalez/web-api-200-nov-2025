@@ -9,7 +9,7 @@ namespace HelpDesk.Vips.Api.HelpDesk;
 public class VipController : ControllerBase
 {
     [HttpPost("/vip-check")]
-    public async Task<ActionResult> CheckForVipAsync(VipRequestMessage request, [FromServices] IDocumentSession session)
+    public async Task<ActionResult<VipResponseMessage>> CheckForVipAsync(VipRequestMessage request, [FromServices] IDocumentSession session)
     {
         return Ok(new VipResponseMessage() { IsVip = true, UserSubject = request.UserSubject });
     }

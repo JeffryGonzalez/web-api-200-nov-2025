@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: help-desk-api-ingress
+  labels:
+    app.kubernetes.io/name: help-desk-api-ingress
+spec:
+  rules:
+  - host: helpdesk.company.com
+    https:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: help-desk-issues-api-service
+            port: 
+              number: 443

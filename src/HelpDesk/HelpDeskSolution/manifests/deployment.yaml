@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: help-desk-issues-api
+spec:
+  selector:
+    matchLabels:
+      app: help-desk-issues-api
+  template:
+    metadata:
+      labels:
+        app: help-desk-issues-api
+    spec:
+      containers:
+      - name: help-desk-issues-api
+        image: container-image-name
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
